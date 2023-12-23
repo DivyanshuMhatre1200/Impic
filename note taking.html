@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Taking App</title>
+    <!-- Add Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+<div class="max-w-md mx-auto mt-8 p-8 bg-white rounded-md shadow-md">
+    <label for="heading" class="text-2xl font-semibold">Heading:</label>
+    <input type="text" id="heading" class="w-full mt-2 p-2 border rounded-md focus:outline-none focus:border-blue-500">
+
+    <label for="content" class="text-lg font-semibold mt-4">Content:</label>
+    <textarea id="content" rows="6" class="w-full mt-2 p-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Enter your note"></textarea>
+
+    <button onclick="downloadNote()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">
+        Download as PDF
+    </button>
+
+    <!-- Button to go to the home page -->
+    <a href="home.html" class="mt-4 block text-center text-blue-500 underline hover:text-blue-700 focus:outline-none focus:ring focus:border-blue-300">Go to Home Page</a>
+</div>
+
+<!-- Add html2pdf script -->
+<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+<script>
+    function downloadNote() {
+        var heading = document.getElementById('heading').value;
+        var content = document.getElementById('content').value;
+
+        if (heading && content) {
+            var pdfContent = `<h1 class="text-3xl font-bold mb-4">${heading}</h1><p>${content.replace(/\n/g, '<br>')}</p>`;
+
+            var element = document.createElement('div');
+            element.innerHTML = pdfContent;
+
+            html2pdf(element, {
+                margin: 10,
+                filename: 'note.pdf',
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            });
+        } else {
+            alert('Please enter both heading and content before downloading.');
+        }
+    }
+</script>
+
+</body>
+</html>

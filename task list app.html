@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f8f8;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            background-color: #fff;
+            padding: 8px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        label {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        input[type="text"] {
+            width: 150px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #5a96b4; /* Slightly Darker Blue */
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task List</h1>
+
+    <ul id="taskList">
+        <!-- Task items will be added here dynamically -->
+    </ul>
+
+    <h2>Add New Task</h2>
+    <form id="addTaskForm">
+        <label for="newTask">Task:</label>
+        <input type="text" id="newTask" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <div>
+        <a href="home.html" class="mt-4 block text-center text-blue-500 underline hover:text-blue-700 focus:outline-none focus:ring focus:border-blue-300">Go to Home Page</a>
+       
+       </div>
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const taskList = document.getElementById('taskList');
+            const addTaskForm = document.getElementById('addTaskForm');
+
+            addTaskForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const newTaskInput = document.getElementById('newTask');
+                const newTaskText = newTaskInput.value.trim();
+
+                if (newTaskText !== '') {
+                    addTask(newTaskText);
+                    newTaskInput.value = '';
+                }
+            });
+
+            // Function to add a new task to the list
+            function addTask(taskText) {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <label>
+                        <input type="checkbox">
+                        ${taskText}
+                    </label>
+                    <button onclick="editTask(this)">Edit</button>
+                `;
+                taskList.appendChild(li);
+            }
+
+            // Function to edit a task
+            window.editTask = function(button) {
+                const li = button.parentNode;
+                const label = li.querySelector('label');
+                const checkbox = label.querySelector('input[type="checkbox"]');
+                const taskText = label.childNodes[2].nodeValue.trim();
+
+                const newText = prompt('Edit task:', taskText);
+
+                if (newText !== null) {
+                    label.childNodes[2].nodeValue = ` ${newText}`;
+                }
+            };
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Journal</title>
+    <!-- Add Tailwind CSS for styling (optional) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Add additional styling here if needed */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .journal-entry {
+            position: relative;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .journal-entry:hover {
+            transform: scale(1.05);
+        }
+
+        .entry-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .entry-content {
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            text-align: left;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn-group {
+            text-align: right;
+        }
+
+        .btn-group button {
+            background-color: #3490dc; /* Light blue */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-group button:hover {
+            background-color: #2779bd; /* Darker blue on hover */
+        }
+
+        .edit-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: #3490dc; /* Light blue */
+            color: white;
+            padding: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-btn:hover {
+            background-color: #2779bd; /* Darker blue on hover */
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 class="text-3xl font-bold mb-4">My Grid Journal</h1>
+
+    <div class="grid" id="journalGrid">
+        <!-- Default grid entries -->
+        <div class="journal-entry">
+            <div class="entry-title">Default Entry 1</div>
+            <div class="entry-content">Type Here</div>
+            <button class="edit-btn" onclick="openModal(0)">✎</button>
+        </div>
+        <div class="journal-entry">
+            <div class="entry-title">Default Entry 2</div>
+            <div class="entry-content">Type Here</div>
+            <button class="edit-btn" onclick="openModal(1)">✎</button>
+        </div>
+        <!-- Add more entries as needed -->
+    </div>
+
+    <!-- Add Entry button -->
+    <div class="btn-group">
+        <button onclick="openModal()">Add Entry</button>
+    </div>
+
+    <!-- Modal for adding/editing entries -->
+    <div id="entryModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <div class="input-group">
+                <label for="entryTitle">Title:</label>
+                <input type="text" id="entryTitle" placeholder="Enter title">
+            </div>
+
+            <div class="input-group">
+                <label for="entryContent">Content:</label>
+                <textarea id="entryContent" placeholder="Type Here"></textarea>
+            </div>
+
+            <div class="btn-group">
+                <button onclick="saveEntry()">Save Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var defaultEntries = [
+            { title: 'Default Entry 1', content: 'Type Here' },
+            { title: 'Default Entry 2', content: 'Type Here' }
+        ];
+
+        var grid = document.getElementById('journalGrid');
+        defaultEntries.forEach((entry, index) => {
+            createEntry(entry.title, entry.content, index);
+        });
+
+        function openModal(index) {
+            var titleInput = document.getElementById('entryTitle');
+            var contentInput = document.getElementById('entryContent');
+
+            titleInput.value = grid.children[index].getElementsByClassName('entry-title')[0].innerText;
+            contentInput.value = grid.children[index].getElementsByClassName('entry-content')[0].innerText;
+
+            document.getElementById('entryModal').style.display = 'block';
+            document.getElementById('entryModal').dataset.editingIndex = index;
+        }
+
+        function closeModal() {
+            document.getElementById('entryModal').style.display = 'none';
+            delete document.getElementById('entryModal').dataset.editingIndex;
+        }
+
+        function saveEntry() {
+            var title = document.getElementById('entryTitle').value;
+            var content = document.getElementById('entryContent').value;
+
+            if (title && content) {
+                var editingIndex = document.getElementById('entryModal').dataset.editingIndex;
+
+                if (editingIndex !== undefined) {
+                    updateEntry(editingIndex, title, content);
+                } else {
+                    createEntry(title, content);
+                }
+
+                closeModal();
+            } else {
+                alert('Please enter both title and content.');
+            }
+        }
+
+        function createEntry(title, content, index) {
+            var entry = document.createElement('div');
+            entry.className = 'journal-entry';
+
+            entry.innerHTML = `
+                <div class="entry-title">${title}</div>
+                <div class="entry-content">${content}</div>
+                <button class="edit-btn" onclick="openModal(${index})">✎</button>
+            `;
+
+            grid.appendChild(entry);
+
+            entry.addEventListener('mouseenter', function () {
+                entry.style.transform = 'scale(1.05)';
+            });
+
+            entry.addEventListener('mouseleave', function () {
+                entry.style.transform = 'scale(1)';
+            });
+        }
+
+        function updateEntry(index, title, content) {
+            var entry = grid.children[index];
+            entry.getElementsByClassName('entry-title')[0].innerText = title;
+            entry.getElementsByClassName('entry-content')[0].innerText = content;
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Improvement App</title>
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #f0f2f5;
+            color: #172a4e;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        #financeSection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 50%; /* Adjust the width as needed */
+            max-width: 600px; /* Set a maximum width if desired */
+            margin-top: 20px;
+        }
+
+        label, input, button, ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input, button {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #dfe1e6;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #172a4e;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #000;
+            color: #fff;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        #balance {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .positive {
+            color: #28a745;
+        }
+
+        .negative {
+            color: #dc3545;
+        }
+
+        #transactionList {
+            margin-top: 10px;
+        }
+
+        #transactionList li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Finance Tracker Section -->
+    <div id="financeSection">
+        <label for="income">Income:</label>
+        <input type="number" id="income" placeholder="Enter income">
+
+        <label for="expenses">Expenses:</label>
+        <input type="number" id="expenses" placeholder="Enter expenses">
+
+        <button onclick="addTransaction()">Add Transaction</button>
+
+        <div id="balance" class="positive">Balance: $0.00</div>
+    </div>
+
+    <ul id="transactionList"></ul>
+
+
+<div>
+ <a href="home.html" class="mt-4 block text-center text-blue-500 underline hover:text-blue-700 focus:outline-none focus:ring focus:border-blue-300">Go to Home Page</a>
+
+</div>
+
+
+    <script>
+        let transactions = [];
+
+        function updateBalance() {
+            const incomeInput = document.getElementById('income');
+            const expensesInput = document.getElementById('expenses');
+            const balanceDiv = document.getElementById('balance');
+
+            const income = parseFloat(incomeInput.value) || 0;
+            const expenses = parseFloat(expensesInput.value) || 0;
+            const balance = income - expenses;
+
+            balanceDiv.innerText = `Balance: $${balance.toFixed(2)}`;
+
+            // Update the color based on the balance value
+            if (balance >= 0) {
+                balanceDiv.className = 'positive';
+            } else {
+                balanceDiv.className = 'negative';
+            }
+        }
+
+        function addTransaction() {
+            const incomeInput = document.getElementById('income');
+            const expensesInput = document.getElementById('expenses');
+
+            const income = parseFloat(incomeInput.value) || 0;
+            const expenses = parseFloat(expensesInput.value) || 0;
+            const balance = income - expenses;
+
+            const transaction = {
+                income: income.toFixed(2),
+                expenses: expenses.toFixed(2),
+                balance: balance.toFixed(2),
+                timestamp: new Date().toLocaleString(),
+            };
+
+            transactions.push(transaction);
+
+            displayTransactions();
+            updateBalance();
+        }
+
+        function displayTransactions() {
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = '';
+
+            transactions.forEach(transaction => {
+                const li = document.createElement('li');
+                li.innerText = `${transaction.timestamp} - Income: $${transaction.income}, Expenses: $${transaction.expenses}, Balance: $${transaction.balance}`;
+                transactionList.appendChild(li);
+            });
+        }
+
+        // Initial display
+        updateBalance();
+
+        // Display existing transactions if any
+        displayTransactions();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation Timer</title>
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #f0f2f5;
+            color: #172a4e;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: right;
+            justify-content: right;
+            min-height: 100vh;
+        }
+
+        #meditationTimer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #timerCircle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 5px solid #3498db;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #timerText {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            background-color: #3498db;
+            color: #f1f1f1;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #410606;
+        }
+    </style>
+</head>
+</html>
+
+
+
+
+
+
+
+
